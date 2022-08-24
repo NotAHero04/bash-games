@@ -1,0 +1,64 @@
+#! /bin/bash
+
+# Function for printing the board
+
+board=(. . . . . . . . .)
+
+player=1
+occupied=0
+over=0
+
+lines="012\n345\n678\n036\n147\n258\n048\n246"
+
+while [ $over -eq 0 ]; do
+	clear
+	for i in $(seq 0 2); do
+		for j in $(seq 0 2); do
+			result="$result ${board[((3*i+j))]}"
+		done
+		result="$result\n"
+	done
+	echo -e -n "$result"
+	result=""
+	if [ -z "$message" ]; then
+		printf "Player $player's turn: "
+	else
+		printf "\033[s$message"
+	fi
+	read tile_pos
+	column=$(echo $tile_pos | cut -d ' ' -f1)
+	row=$(echo $tile_pos | cut -d ' ' -f2)
+	if [ $player -eq 1 ]; then
+		sign="X"
+	else
+		sign="O"
+	fi
+	if [[ $column -lt 1 || $column -gt 3 ]]; then
+		message="\033[u\033[2KColumn number must be between 1 and 3 (inclusive). "
+	elif [[ $row -lt 1 || $row -gt 3 ]]; then
+		message="\033[u\033[2KRow number must be between 1 and 3 (inclusive). "
+	elif [ "${board[((3*(row-1)+column-1))]}" != "." ]; then
+		message="\033[u\033[2KThe tile is occupied! "
+	else
+		k=$((3*(row-1)+column-1))
+		board[$k]=$sign
+		choices=$(printf $lines | grep $k)
+		for choice in $choices; do
+			tiles=($(echo $choice | sed 's/./& /g'))
+			if [[ "${board[${tiles[0]}]}" != "." && "${board[${tiles[0]}]}" == "${board[${tiles[1]}]}" && "${board[${tiles[1]}]}" == "${board[${tiles[2]}]}" ]]; then
+				echo "Player $player won the game!"
+				over=1
+			fi
+		done
+		occupied=$((occupied+1))
+		if [ $occupied -eq 9 ]; then
+			echo "Tied!"
+			over=1
+		elif [ $player -eq 1 ]; then
+			player=2
+		else
+			player=1
+		fi
+	message=""
+	fi
+done
