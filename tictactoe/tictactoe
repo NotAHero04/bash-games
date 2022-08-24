@@ -46,10 +46,11 @@ while [ $over -eq 0 ]; do
 			if [[ "${board[${tiles[0]}]}" != "." && "${board[${tiles[0]}]}" == "${board[${tiles[1]}]}" && "${board[${tiles[1]}]}" == "${board[${tiles[2]}]}" ]]; then
 				echo "Player $player won the game!"
 				over=1
+				break
 			fi
 		done
 		occupied=$((occupied+1))
-		if [ $occupied -eq 9 ]; then
+		if [[ $occupied -eq 9 && $over -eq 0 ]]; then
 			echo "Tied!"
 			over=1
 		elif [ $player -eq 1 ]; then
