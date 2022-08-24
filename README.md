@@ -1,2 +1,2 @@
 # bash-games
-A collection of self-made simple Bash games
+Simple, funny Bash scripts to make your day with Linux.
