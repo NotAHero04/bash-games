@@ -1,7 +1,5 @@
 #! /bin/bash
 
-# Function for printing the board
-
 board=(. . . . . . . . .)
 
 player=1
