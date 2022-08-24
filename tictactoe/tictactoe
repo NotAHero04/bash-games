@@ -10,7 +10,9 @@ lines="012\n345\n678\n036\n147\n258\n048\n246"
 
 while [ $over -eq 0 ]; do
 	clear
+	result="   1 2 3\n"
 	for i in $(seq 0 2); do
+		result="$result $((i+1))"
 		for j in $(seq 0 2); do
 			result="$result ${board[((3*i+j))]}"
 		done
